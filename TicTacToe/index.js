@@ -1,6 +1,11 @@
 //Author: Brett Wells
 //Date: 1/18/21
 
+//declare HTML elements
+const statusDiv = document.querySelector('.status');
+const resetDiv = document.querySelector('.reset');
+const cellDivs = document.querySelectorAll('.game-cell');
+
 //define the board
 let b = [
   [' ', ' ', ' '],
@@ -10,14 +15,32 @@ let b = [
 let turn = 0;
 let win = false;
 
+//event listeners
+resetDiv.addEventListener('click', handleReset);
+
+for (const cellDiv of cellDivs) {
+  cellDiv.addEventListener('click', handleCellClick);
+}
+
+//event Handlers
+function handleReset(e) {
+  console.log(e);
+}
+
+function handleCellClick(e) {
+  console.log(e);
+}
+
+
+
 //Outputs board elements to console
-function printBoard() {
+function printBoard(b) {
     console.log(b[0][0] + '|' + b[0][1] + '|' + b[0][2]);
     console.log('------');
     console.log(b[1][0] + '|' + b[1][1] + '|' + b[1][2]);
     console.log('------');
     console.log(b[2][0] + '|' + b[2][1] + '|' + b[2][2]);
-};
+}
 
 function checkWin(b) {
   //check rows
@@ -42,7 +65,7 @@ function checkWin(b) {
   return false;
 }
 
-function runGame() {
+/*function runGame() {
   do {
     if(turn != 1) printBoard();
     //std::cout << turn << std::endl;
@@ -66,12 +89,18 @@ function runGame() {
   if(!win) {
     console.log('Tie game.');
   if(win) printBoard();
+}*/
+
+function playerTurn() {
+  let x, y;
+  
 }
 
 //main JS
-printBoard();
+printBoard(b);
+playerTurn();
 if(checkWin(b)) {
   console.log('Win');
 } else {
-  console.log('Lose')
+  console.log('Lose');
 }
