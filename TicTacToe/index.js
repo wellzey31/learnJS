@@ -15,6 +15,18 @@ let b = [
 let turn = 0;
 let win = false;
 
+//function to place either an 'X' or an 'O'
+function xOro() {
+  turn++;
+  if (turn % 2 == 0) {
+    statusDiv.innerHTML = 'O is next';
+    return 'X';
+  } else {
+    statusDiv.innerHTML = 'X is next';
+    return 'O';
+  }
+}
+
 //event listeners
 resetDiv.addEventListener('click', handleReset);
 
@@ -25,10 +37,15 @@ for (const cellDiv of cellDivs) {
 //event Handlers
 function handleReset(e) {
   console.log(e);
+
 }
 
 function handleCellClick(e) {
+  console.log(e.target.id);
   console.log(e);
+  if (e.target.innerHTML == ' ') {
+    document.getElementById(e.target.id).innerHTML = xOro();
+  }
 }
 
 
@@ -92,8 +109,8 @@ function checkWin(b) {
 }*/
 
 function playerTurn() {
-  let x, y;
-  
+
+
 }
 
 //main JS
