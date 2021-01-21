@@ -37,15 +37,23 @@ for (const cellDiv of cellDivs) {
 //event Handlers
 function handleReset(e) {
   console.log(e);
-
+  if (e.target.className == 'reset'){
+    console.log('true')
+  }
+  resetBoard(b);
+  turn = 0;
 }
 
 function handleCellClick(e) {
+  if (e.target.id != null) {
+    if (e.target.innerHTML == ' ') {
+      document.getElementById(e.target.id).innerHTML = xOro();
+    }
+  }
   console.log(e.target.id);
   console.log(e);
-  if (e.target.innerHTML == ' ') {
-    document.getElementById(e.target.id).innerHTML = xOro();
-  }
+  updateBoard(b);
+  printBoard(b);
 }
 
 
@@ -80,6 +88,27 @@ function checkWin(b) {
     return true;
   }
   return false;
+}
+
+function updateBoard(b) {
+  b[0][0] = document.getElementById('c1').innerHTML;
+  b[0][1] = document.getElementById('c2').innerHTML;
+  b[0][2] = document.getElementById('c3').innerHTML;
+  b[1][0] = document.getElementById('c4').innerHTML;
+  b[1][1] = document.getElementById('c5').innerHTML;
+  b[1][2] = document.getElementById('c6').innerHTML;
+  b[2][0] = document.getElementById('c7').innerHTML;
+  b[2][1] = document.getElementById('c8').innerHTML;
+  b[2][2] = document.getElementById('c9').innerHTML;
+}
+
+function resetBoard(b) {
+  for (cellDiv of cellDivs) {
+    cellDiv.innerHTML = ' ';
+  }
+  updateBoard(b);
+  printBoard(b);
+  statusDiv.innerHTML = 'O is next';
 }
 
 /*function runGame() {
