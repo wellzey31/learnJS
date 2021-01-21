@@ -34,6 +34,8 @@ for (const cellDiv of cellDivs) {
   cellDiv.addEventListener('click', handleCellClick);
 }
 
+
+
 //event Handlers
 function handleReset(e) {
   console.log(e);
@@ -137,17 +139,3 @@ function resetBoard(b) {
     console.log('Tie game.');
   if(win) printBoard();
 }*/
-
-function playerTurn() {
-
-
-}
-
-//main JS
-printBoard(b);
-playerTurn();
-if(checkWin(b)) {
-  console.log('Win');
-} else {
-  console.log('Lose');
-}
