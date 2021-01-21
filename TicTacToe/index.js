@@ -5,6 +5,8 @@
 const statusDiv = document.querySelector('.status');
 const resetDiv = document.querySelector('.reset');
 const cellDivs = document.querySelectorAll('.game-cell');
+const cpuSwitchDiv = document.querySelector('.cpuSwitch');
+const firstSwitchDiv = document.querySelector('.firstSwitch');
 
 //define the board
 let b = [
@@ -14,6 +16,8 @@ let b = [
 ];
 let turn = 0;
 let win = false;
+let cpuOn = false;
+let cpuFirst = true;
 
 //function to place either an 'X' or an 'O'
 function xOro() {
@@ -30,6 +34,10 @@ function xOro() {
 //event listeners
 resetDiv.addEventListener('click', handleReset);
 
+cpuSwitchDiv.addEventListener('mousedown', handleCpuSwitch);
+
+firstSwitchDiv.addEventListener('mousedown', handleFirstSwitch);
+
 for (const cellDiv of cellDivs) {
   cellDiv.addEventListener('click', handleCellClick);
 }
@@ -44,6 +52,18 @@ function handleReset(e) {
   }
   resetBoard(b);
   turn = 0;
+}
+
+function handleCpuSwitch(e) {
+  console.log(e);
+  cpuOn = !cpuOn;
+  console.log(cpuOn);
+}
+
+function handleFirstSwitch(e) {
+  console.log(e);
+  cpuFirst = !cpuFirst;
+  console.log(cpuFirst);
 }
 
 function handleCellClick(e) {
