@@ -48,12 +48,13 @@ function handleCellClick(e) {
   if (e.target.id != null) {
     if (e.target.innerHTML == ' ') {
       document.getElementById(e.target.id).innerHTML = xOro();
+      updateBoard(b);
+      printBoard(b);
+      if(checkWin(b)) console.log('Player Win!');
     }
   }
   console.log(e.target.id);
   console.log(e);
-  updateBoard(b);
-  printBoard(b);
 }
 
 
