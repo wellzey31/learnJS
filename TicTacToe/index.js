@@ -18,9 +18,10 @@ let turn = 0;
 let win = false;
 let cpuOn = false;
 let cpuFirst = true;
-var bestMove = {
-  x : -1, y : -1
-};
+function Move() {
+  this.x = -1;
+  this.y = -1;
+}
 
 for (var i = 0; i < 3; i++) {
   for (var j = 0; j < 3; j++) {
@@ -33,7 +34,7 @@ console.log('i =' + i + ' j =' + j);
 function xOro() {
   turn++;
   if (turn % 2 == 0) {
-    statusDiv.innerHTML = 'O is next';
+    statusDiv.innerHTML = 'Player Turn: X';
     return 'X';
   } else {
     statusDiv.innerHTML = 'X is next';
@@ -79,14 +80,17 @@ function handleFirstSwitch(e) {
 function handleCellClick(e) {
   if (e.target.id != null) {
     if (e.target.innerHTML == ' ') {
-      document.getElementById(e.target.id).innerHTML = xOro();
+      document.getElementById(e.target.id).innerHTML = 'X';
       updateBoard(b);
       printBoard(b);
       if(checkWin(b)) {
         console.log('Player Win!');
       } else {
-        chooseMove(b);
-        b[bestMove.x][bestMove.y];
+        var theMove = new Move();
+        theMove = chooseMove(b);
+        console.log(theMove.x + ' ' + theMove.y);
+        b[theMove.x][theMove.y] = 'O';
+
         updateBoardHTML(b);
         printBoard(b);
       }
@@ -163,8 +167,7 @@ function resetBoard(b) {
 
 function chooseMove(b) {
   bestVal = -1000;
-  bestMove.x = -1;
-  bestMove.y = -1;
+  var bestMove = new Move();
 
   //traverse board for open positions
   for (var i = 0; i < 3; i++) {
@@ -226,7 +229,6 @@ function minimax(b, depth, isMax) {
           //compute max
           best = Math.min(best, minimax(b, depth+1, !isMax));
           //undo move
-          console.log('r =' + r + ' c =' + c);
           b[r][c] = ' ';
         }
       }
