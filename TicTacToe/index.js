@@ -58,7 +58,7 @@ function handleReset(e) {
   resetBoard(b);
   turn = 0;
   if (popup) gameOver();
-  if (cpuOn && cpuFirst) cpuMove();
+  if (cpuOn && cpuFirst) cpuMove(b);
 }
 
 function handleCpuSwitch(e) {
