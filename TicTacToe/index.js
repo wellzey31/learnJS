@@ -18,17 +18,11 @@ let turn = 0;
 let win = false;
 let cpuOn = false;
 let cpuFirst = true;
+let popup = false;
 function Move() {
   this.x = -1;
   this.y = -1;
 }
-
-for (var i = 0; i < 3; i++) {
-  for (var j = 0; j < 3; j++) {
-    console.log('i =' + i + ' j =' + j);
-  }
-}
-console.log('i =' + i + ' j =' + j);
 
 //function to place either an 'X' or an 'O'
 function xOro() {
@@ -63,6 +57,8 @@ function handleReset(e) {
   }
   resetBoard(b);
   turn = 0;
+  if (popup) gameOver();
+  if (cpuOn && cpuFirst) cpuMove();
 }
 
 function handleCpuSwitch(e) {
@@ -77,7 +73,23 @@ function handleFirstSwitch(e) {
   console.log(cpuFirst);
 }
 
+function cpuMove(b) {
+  var theMove = new Move();
+  theMove = chooseMove(b);
+  console.log(theMove.x + ' ' + theMove.y);
+  b[theMove.x][theMove.y] = 'O';
+  updateBoardHTML(b);
+  printBoard(b);
+}
+
 function handleCellClick(e) {
+  if (boardFull(b) || checkWin(b)) {
+    if (!popup) {
+      popup = true;
+      gameOver();
+    }
+    return;
+  }
   if (e.target.id != null) {
     if (e.target.innerHTML == ' ') {
       document.getElementById(e.target.id).innerHTML = 'X';
@@ -86,18 +98,17 @@ function handleCellClick(e) {
       if(checkWin(b)) {
         console.log('Player Win!');
       } else {
-        var theMove = new Move();
-        theMove = chooseMove(b);
-        console.log(theMove.x + ' ' + theMove.y);
-        b[theMove.x][theMove.y] = 'O';
-
-        updateBoardHTML(b);
-        printBoard(b);
+        cpuMove(b);
       }
     }
   }
   console.log(e.target.id);
   console.log(e);
+}
+
+function gameOver() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
 }
 
 //Outputs board elements to console
