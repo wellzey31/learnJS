@@ -28,7 +28,7 @@ function Move() {
 function xOro() {
   turn++;
   if (turn % 2 == 0) {
-    statusDiv.innerHTML = 'Player Turn: X';
+    statusDiv.innerHTML = 'O is Next';
     return 'X';
   } else {
     statusDiv.innerHTML = 'X is next';
@@ -38,9 +38,7 @@ function xOro() {
 
 //event listeners
 resetDiv.addEventListener('click', handleReset);
-
 cpuSwitchDiv.addEventListener('mousedown', handleCpuSwitch);
-
 firstSwitchDiv.addEventListener('mousedown', handleFirstSwitch);
 
 for (const cellDiv of cellDivs) {
@@ -51,9 +49,9 @@ for (const cellDiv of cellDivs) {
 
 //event Handlers
 function handleReset(e) {
-  console.log(e);
+  //console.log(e);
   if (e.target.className == 'reset'){
-    console.log('true')
+    //console.log('true')
   }
   resetBoard(b);
   turn = 0;
@@ -62,15 +60,15 @@ function handleReset(e) {
 }
 
 function handleCpuSwitch(e) {
-  console.log(e);
+  //console.log(e);
   cpuOn = !cpuOn;
-  console.log(cpuOn);
+  //console.log(cpuOn);
 }
 
 function handleFirstSwitch(e) {
-  console.log(e);
+  //console.log(e);
   cpuFirst = !cpuFirst;
-  console.log(cpuFirst);
+  //console.log(cpuFirst);
 }
 
 function cpuMove(b) {
@@ -79,7 +77,7 @@ function cpuMove(b) {
   console.log(theMove.x + ' ' + theMove.y);
   b[theMove.x][theMove.y] = 'O';
   updateBoardHTML(b);
-  printBoard(b);
+  //printBoard(b);
 }
 
 function handleCellClick(e) {
@@ -91,19 +89,23 @@ function handleCellClick(e) {
     return;
   }
   if (e.target.id != null) {
-    if (e.target.innerHTML == ' ') {
+    if (e.target.innerHTML == ' ' && cpuOn) {
       document.getElementById(e.target.id).innerHTML = 'X';
       updateBoard(b);
-      printBoard(b);
+      //printBoard(b);
       if(checkWin(b)) {
-        console.log('Player Win!');
+        //console.log('Player Win!');
       } else {
         cpuMove(b);
       }
+    } else if (e.target.innerHTML == ' ') {
+      document.getElementById(e.target.id).innerHTML = xOro();
+      updateBoard(b);
+      //printBoard(b);
     }
   }
-  console.log(e.target.id);
-  console.log(e);
+  //console.log(e.target.id);
+  //console.log(e);
 }
 
 function gameOver() {
@@ -172,7 +174,7 @@ function resetBoard(b) {
     cellDiv.innerHTML = ' ';
   }
   updateBoard(b);
-  printBoard(b);
+  //printBoard(b);
   statusDiv.innerHTML = 'O is next';
 }
 
