@@ -8,7 +8,7 @@ const cellDivs = document.querySelectorAll('.game-cell');
 const cpuSwitchDiv = document.querySelector('.cpuSwitch');
 const firstSwitchDiv = document.querySelector('.firstSwitch');
 
-//define the board
+//define variables
 let b = [
   [' ', ' ', ' '],
   ['X', 'X', 'X'],
@@ -18,6 +18,9 @@ let turn = 0;
 let win = false;
 let cpuOn = false;
 let cpuFirst = true;
+var bestMove = {
+  x : -1, y : -1
+};
 
 //function to place either an 'X' or an 'O'
 function xOro() {
@@ -79,8 +82,6 @@ function handleCellClick(e) {
   console.log(e);
 }
 
-
-
 //Outputs board elements to console
 function printBoard(b) {
     console.log(b[0][0] + '|' + b[0][1] + '|' + b[0][2]);
@@ -134,28 +135,84 @@ function resetBoard(b) {
   statusDiv.innerHTML = 'O is next';
 }
 
-/*function runGame() {
-  do {
-    if(turn != 1) printBoard();
-    //std::cout << turn << std::endl;
-    if(turn % 2 == 0) {
-      playerTurn();
-      if (checkWin(b)) {
-        console.log('You win!');
-        win = true;
-        break;
-      }
-    } else {
-      computerTurn();
-      if (checkWin(b)) {
-        console.log('Computer wins.');
-        win = true;
-        break;
+function chooseMove(b) {
+  bestVal = -1000;
+  bestMove.x = -1;
+  bestMove.y = -1;
+
+  //traverse board for open positions
+  for (i = 0; i < 3; i++) {
+    for (j = 0; j < 3; j++) {
+      //check for empty positions
+      if (b[i][j] == ' ') {
+        b[i][j] = 'O';
+        moveVal = minimax(0, false, b);
+
+        //undo move
+        b[i][j] = ' ';
+
+        //if the value is max then this is the best move
+        if (moveVal > bestVal) {
+          bestMove.x = i;
+          bestMove.y = j;
+          bestVal = moveVal;
+        }
       }
     }
-    turn++;
-  } while (!boardFull(b));
-  if(!win) {
-    console.log('Tie game.');
-  if(win) printBoard();
-}*/
+  }
+  return bestMove;
+}
+
+function minimax(depth, isMax, b) {
+  //cpu win condition
+  if (!isMax && checkWin()) {
+    return 10;
+  //human win check
+  } else if (isMax && checkWin()) {
+    return -10;
+  //tie check
+  } else if (boardFull()) {
+    return 0;
+  }
+  if (isMax) {
+    best = -100;
+
+    for (i = 0; i < 3; i++) {
+      for (j = 0; j < 3; j++) {
+        if (b[i][j] == ' ') {
+          //make move
+          b[i][j] = 'O';
+          //compute max
+          best = Math.max(best, minimax(depth+1, !isMax));
+          //undo move
+          b[i][j] = ' ';
+        }
+      }
+    }
+    return best;
+  } else {
+    best = 100;
+    for (i = 0; i < 3; i++) {
+      for (j = 0; j < 3; j++) {
+        if (b[i][j] == ' ') {
+          //make move
+          b[i][j] = 'X';
+          //compute max
+          best = Math.min(best, minimax(depth+1, !isMax));
+          //undo move
+          b[i][j] = ' ';
+        }
+      }
+    }
+    return best;
+  }
+}
+
+function boardFull(b) {
+  for(i = 0; i < 3; i++) {
+    for (j = 0; j < 3; j++) {
+      if (b[i][j] == ' ') return false;
+    }
+  }
+  return true;
+}
