@@ -11,7 +11,7 @@ const firstSwitchDiv = document.querySelector('.firstSwitch');
 //define variables
 let b = [
   [' ', ' ', ' '],
-  ['X', 'X', 'X'],
+  [' ', ' ', ' '],
   [' ', ' ', ' ']
 ];
 let turn = 0;
@@ -21,6 +21,13 @@ let cpuFirst = true;
 var bestMove = {
   x : -1, y : -1
 };
+
+for (var i = 0; i < 3; i++) {
+  for (var j = 0; j < 3; j++) {
+    console.log('i =' + i + ' j =' + j);
+  }
+}
+console.log('i =' + i + ' j =' + j);
 
 //function to place either an 'X' or an 'O'
 function xOro() {
@@ -75,7 +82,14 @@ function handleCellClick(e) {
       document.getElementById(e.target.id).innerHTML = xOro();
       updateBoard(b);
       printBoard(b);
-      if(checkWin(b)) console.log('Player Win!');
+      if(checkWin(b)) {
+        console.log('Player Win!');
+      } else {
+        chooseMove(b);
+        b[bestMove.x][bestMove.y];
+        updateBoardHTML(b);
+        printBoard(b);
+      }
     }
   }
   console.log(e.target.id);
@@ -93,13 +107,13 @@ function printBoard(b) {
 
 function checkWin(b) {
   //check rows
-  for (i = 0; i < 3; i++) {
+  for (var i = 0; i < 3; i++) {
       if (b[i][1] == b[i][0] && b[i][2] == b[i][0] && b[i][0] != ' ') {
       return true;
     }
   }
   //check cols
-  for (i = 0; i < 3; i++) {
+  for (var i = 0; i < 3; i++) {
       if (b[0][i] == b[1][i] && b[2][i] == b[0][i] && b[0][i] != ' ') {
       return true;
     }
@@ -126,6 +140,18 @@ function updateBoard(b) {
   b[2][2] = document.getElementById('c9').innerHTML;
 }
 
+function updateBoardHTML(b) {
+  document.getElementById('c1').innerHTML = b[0][0];
+  document.getElementById('c2').innerHTML = b[0][1];
+  document.getElementById('c3').innerHTML = b[0][2];
+  document.getElementById('c4').innerHTML = b[1][0];
+  document.getElementById('c5').innerHTML = b[1][1];
+  document.getElementById('c6').innerHTML = b[1][2];
+  document.getElementById('c7').innerHTML = b[2][0];
+  document.getElementById('c8').innerHTML = b[2][1];
+  document.getElementById('c9').innerHTML = b[2][2];
+}
+
 function resetBoard(b) {
   for (cellDiv of cellDivs) {
     cellDiv.innerHTML = ' ';
@@ -141,12 +167,12 @@ function chooseMove(b) {
   bestMove.y = -1;
 
   //traverse board for open positions
-  for (i = 0; i < 3; i++) {
-    for (j = 0; j < 3; j++) {
+  for (var i = 0; i < 3; i++) {
+    for (var j = 0; j < 3; j++) {
       //check for empty positions
       if (b[i][j] == ' ') {
         b[i][j] = 'O';
-        moveVal = minimax(0, false, b);
+        moveVal = minimax(b, 0, false);
 
         //undo move
         b[i][j] = ' ';
@@ -163,44 +189,45 @@ function chooseMove(b) {
   return bestMove;
 }
 
-function minimax(depth, isMax, b) {
+function minimax(b, depth, isMax) {
   //cpu win condition
-  if (!isMax && checkWin()) {
+  if (!isMax && checkWin(b)) {
     return 10;
   //human win check
-  } else if (isMax && checkWin()) {
+  } else if (isMax && checkWin(b)) {
     return -10;
   //tie check
-  } else if (boardFull()) {
+  } else if (boardFull(b)) {
     return 0;
   }
   if (isMax) {
     best = -100;
 
-    for (i = 0; i < 3; i++) {
-      for (j = 0; j < 3; j++) {
-        if (b[i][j] == ' ') {
+    for (var row = 0; row < 3; row++) {
+      for (var col = 0; col < 3; col++) {
+        if (b[row][col] == ' ') {
           //make move
-          b[i][j] = 'O';
+          b[row][col] = 'O';
           //compute max
-          best = Math.max(best, minimax(depth+1, !isMax));
+          best = Math.max(best, minimax(b, depth+1, !isMax));
           //undo move
-          b[i][j] = ' ';
+          b[row][col] = ' ';
         }
       }
     }
     return best;
   } else {
     best = 100;
-    for (i = 0; i < 3; i++) {
-      for (j = 0; j < 3; j++) {
-        if (b[i][j] == ' ') {
+    for (var r = 0; r < 3; r++) {
+      for (var c = 0; c < 3; c++) {
+        if (b[r][c] == ' ') {
           //make move
-          b[i][j] = 'X';
+          b[r][c] = 'X';
           //compute max
-          best = Math.min(best, minimax(depth+1, !isMax));
+          best = Math.min(best, minimax(b, depth+1, !isMax));
           //undo move
-          b[i][j] = ' ';
+          console.log('r =' + r + ' c =' + c);
+          b[r][c] = ' ';
         }
       }
     }
